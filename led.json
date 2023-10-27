@@ -1,0 +1,91 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "led",
+    "projectId": null,
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": true,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 3,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 546,
+          "layoutY": 150
+        },
+        "type": "org.iot.rule.engine.transform.TbTransformMsgNode",
+        "name": "control led",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var button = msg.button;\nvar status;\nif(button != null)\n{\n    if(button == 1)\n    {\n        status = \"on\";\n    }\n    else if (button == 0)\n    {\n        status = \"off\"\n    }\n    msg = {\n        status: status\n    }\n}\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 784,
+          "layoutY": 208
+        },
+        "type": "org.iot.rule.engine.mqtt.PublishMqttToDeviceNode",
+        "name": "send device",
+        "debugMode": false,
+        "configuration": {
+          "topicPattern": "messages/${deviceID}/control",
+          "retain": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 782,
+          "layoutY": 147
+        },
+        "type": "org.iot.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "save attributes",
+        "debugMode": false,
+        "configuration": {
+          "scope": null,
+          "notifyDevice": null,
+          "loggedHistory": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 276,
+          "layoutY": 150
+        },
+        "type": "org.iot.rule.engine.filter.TbJsSwitchNode",
+        "name": "Switch topic",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return metadata.topic\n"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 0,
+        "type": "status"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

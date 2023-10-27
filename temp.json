@@ -1,0 +1,101 @@
+{
+  "ruleChain": {
+    "additionalInfo": {
+      "description": ""
+    },
+    "name": "temp",
+    "projectId": null,
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 266,
+          "layoutY": 149
+        },
+        "type": "org.iot.rule.engine.filter.TbJsSwitchNode",
+        "name": "topic",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return metadata.topic"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 506,
+          "layoutY": 147
+        },
+        "type": "org.iot.rule.engine.transform.TbTransformMsgNode",
+        "name": "read temp",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.temp = msg.temp;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 265,
+          "layoutY": 251
+        },
+        "type": "org.iot.rule.engine.filter.TbJsFilterNode",
+        "name": "over temp",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return msg.temp > 30;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "",
+          "layoutX": 495,
+          "layoutY": 253
+        },
+        "type": "org.iot.rule.engine.mail.TbSendEmailNode",
+        "name": "send alarm",
+        "debugMode": true,
+        "configuration": {
+          "useSystemSmtpSettings": false,
+          "smtpProtocol": "smtp",
+          "smtpHost": "smtp.gmail.com",
+          "smtpPort": 465,
+          "timeout": 10000,
+          "username": "tickervietnam@gmail.com",
+          "password": "edpukatwuquhrqzq",
+          "fromTemplate": "tickervietnam@gmail.com",
+          "toTemplate": "tien.tv160999@gmail.com",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "Device ${deviceName}  temperature high",
+          "mailBodyType": "false",
+          "bodyTemplate": "Device has high temperature. It is ${temp} oC"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "temp"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "True"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
